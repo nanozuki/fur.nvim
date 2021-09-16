@@ -60,7 +60,7 @@ end
 
 function feature:do_setup()
 	for _, child in ipairs(self.children) do
-		child:reg_plugins()
+		child:do_setup()
 	end
 	local lf = self:latest()
 	lf.setup()
@@ -68,7 +68,7 @@ end
 
 function feature:do_mapping()
 	for _, child in ipairs(self.children) do
-		child:reg_plugins()
+		child:do_mapping()
 	end
 	local lf = self:latest()
 	lf.setup()

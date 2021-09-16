@@ -1,2 +1,7 @@
 # fur.nvim
-Organize your neovim's configs and features by fur.
+
+Organize your neovim config and **f**eat**ur**es by **fur**. Have fun with features opt-in and hot-reload.
+
+## example
+
+https://github.com/nanozuki/CrowsEnv/tree/master/dots/nvim

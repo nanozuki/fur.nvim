@@ -12,6 +12,11 @@ function plug.use(spec)
 	plug.specs[#plug.specs + 1] = spec
 end
 
+function plug.check_installed(path)
+	local install_path = vim.fn.stdpath("data").."/site/pack/packer/"..path
+	return vim.fn.empty(vim.fn.glob(install_path)) ~= 1
+end
+
 -- lazy loading Packer
 function plug.ensure_packer()
 	if plug.packer.ready then

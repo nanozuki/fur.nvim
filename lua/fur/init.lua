@@ -28,6 +28,13 @@ function fur.start()
 	end
 end
 
+function fur.packadd(pack)
+	local exist = plug.check_installed("opt/"..pack)
+	if exist then
+		vim.cmd("packadd "..pack)
+	end
+end
+
 function fur.plug_sync()
 	require("fur.plug").sync()
 end

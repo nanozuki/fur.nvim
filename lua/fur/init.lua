@@ -26,7 +26,7 @@ function fur.start()
 	for _, feature in ipairs(fur.features) do
 		feature:reg_plugins()
 	end
-	plug.install()
+	plug.boot()
 	for _, feature in ipairs(fur.features) do
 		feature:do_setup()
 		feature:do_mapping()

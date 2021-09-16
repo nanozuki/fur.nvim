@@ -24,7 +24,12 @@ function fur.start()
 	log.level = fur.config.log_level
 	vim.g.mapleader = fur.config.mapleader
 	for _, feature in ipairs(fur.features) do
-		feature:execute()
+		feature:reg_plugins()
+	end
+	plug.install()
+	for _, feature in ipairs(fur.features) do
+		feature:do_setup()
+		feature:do_mapping()
 	end
 end
 

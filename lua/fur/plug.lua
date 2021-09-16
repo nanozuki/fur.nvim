@@ -12,9 +12,9 @@ function plug.use(spec)
 	plug.specs[#plug.specs + 1] = spec
 end
 
-function plug.check_installed(path)
-	local install_path = vim.fn.stdpath("data").."/site/pack/packer/"..path
-	return vim.fn.empty(vim.fn.glob(install_path)) ~= 1
+function plug.install()
+	plug.ensure_packer()
+	require("packer").install()
 end
 
 -- lazy loading Packer
@@ -23,7 +23,7 @@ function plug.ensure_packer()
 		return
 	end
 
-	local install_path = vim.fn.stdpath("data") .. "/site/pack/packer/opt/packer.nvim"
+	local install_path = vim.fn.stdpath("data") .. "/site/pack/packer/start/packer.nvim"
 	if vim.fn.empty(vim.fn.glob(install_path)) > 0 then
 		vim.fn.system({ "git", "clone", "https://github.com/wbthomason/packer.nvim", install_path })
 		vim.cmd("packadd packer.nvim")

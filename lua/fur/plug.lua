@@ -19,11 +19,8 @@ function plug.boot() -- if packer not install, to installing all missing plugins
 	local install_path = vim.fn.stdpath("data") .. "/site/pack/packer/opt/packer.nvim"
 	if vim.fn.empty(vim.fn.glob(install_path)) > 0 then
 		vim.fn.system({ "git", "clone", "https://github.com/wbthomason/packer.nvim", install_path })
-		vim.cmd("packadd packer.nvim")
-		require("packer").load("packer.nvim")
-		require("packer").install()
-		plug.packer.ready = true
 	end
+	plug.sync()
 end
 
 -- lazy loading Packer
@@ -46,11 +43,13 @@ function plug.sync()
 		require("packer").use(spec)
 	end
 	require("packer").sync()
+	vim.cmd("runtime! " .. require("packer").config.compile_path)
 end
 
 function plug.compile()
 	plug.load_packer()
 	require("packer").compile()
+	vim.cmd("runtime! " .. require("packer").config.compile_path)
 end
 
 function plug.unset()

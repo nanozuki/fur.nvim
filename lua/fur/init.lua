@@ -24,7 +24,12 @@ function fur.start()
 	log.level = fur.config.log_level
 	vim.g.mapleader = fur.config.mapleader
 	for _, feature in ipairs(fur.features) do
-		feature:execute()
+		feature:reg_plugins()
+	end
+	plug.boot()
+	for _, feature in ipairs(fur.features) do
+		feature:do_setup()
+		feature:do_mapping()
 	end
 end
 
@@ -56,10 +61,8 @@ function fur.reload()
 	end
 	if fur.config.sync_on_reload then
 		plug.sync()
-		vim.cmd("runtime! " .. require("packer").config.compile_path)
 	elseif fur.config.compile_on_reload then
 		plug.compile()
-		vim.cmd("runtime! " .. require("packer").config.compile_path)
 	end
 end
 

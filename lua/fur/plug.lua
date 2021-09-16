@@ -12,23 +12,23 @@ function plug.use(spec)
 	plug.specs[#plug.specs + 1] = spec
 end
 
-function plug.check_installed(path)
-	local install_path = vim.fn.stdpath("data").."/site/pack/packer/"..path
-	return vim.fn.empty(vim.fn.glob(install_path)) ~= 1
-end
-
--- lazy loading Packer
-function plug.ensure_packer()
+function plug.boot() -- if packer not install, to installing all missing plugins.
 	if plug.packer.ready then
 		return
 	end
-
 	local install_path = vim.fn.stdpath("data") .. "/site/pack/packer/opt/packer.nvim"
 	if vim.fn.empty(vim.fn.glob(install_path)) > 0 then
 		vim.fn.system({ "git", "clone", "https://github.com/wbthomason/packer.nvim", install_path })
-		vim.cmd("packadd packer.nvim")
-		require("packer").load("packer.nvim")
 	end
+	plug.sync()
+end
+
+-- lazy loading Packer
+function plug.load_packer()
+	if plug.packer.ready then
+		return
+	end
+	vim.cmd("packadd packer.nvim")
 	require("packer").init({
 		display = {
 			open_fn = require("packer.util").float,
@@ -38,16 +38,18 @@ function plug.ensure_packer()
 end
 
 function plug.sync()
-	plug.ensure_packer()
+	plug.load_packer()
 	for _, spec in ipairs(plug.specs) do
 		require("packer").use(spec)
 	end
 	require("packer").sync()
+	vim.cmd("runtime! " .. require("packer").config.compile_path)
 end
 
 function plug.compile()
-	plug.ensure_packer()
+	plug.load_packer()
 	require("packer").compile()
+	vim.cmd("runtime! " .. require("packer").config.compile_path)
 end
 
 function plug.unset()
@@ -55,7 +57,7 @@ function plug.unset()
 		"nanozuki/fur.nvim",
 		{ "wbthomason/packer.nvim", opt = true },
 	}
-	plug.ensure_packer()
+	plug.load_packer()
 	require("packer").reset()
 end
 

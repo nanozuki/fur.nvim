@@ -44,18 +44,35 @@ local function set_map(mode, lhs, rhs, opts)
 	vim.api.nvim_set_keymap(mode, lhs, rhs, options)
 end
 
-function feature:execute()
-	for _, child in ipairs(self.children) do
-		child:execute()
-	end
+function feature:latest()
+	return all_features[self.name] -- reload leatest features after source file
+end
 
-	log.debug("execute feature " .. self.name)
-	local f = all_features[self.name] -- reload leatest features after source file
-	f.setup()
-	for _, plugin in ipairs(f.plugins) do
+function feature:reg_plugins()
+	for _, child in ipairs(self.children) do
+		child:reg_plugins()
+	end
+	local lf = self:latest()
+	for _, plugin in ipairs(lf.plugins) do
 		require("fur.plug").use(plugin)
 	end
-	for _, mapping in ipairs(f.mappings) do
+end
+
+function feature:do_setup()
+	for _, child in ipairs(self.children) do
+		child:reg_plugins()
+	end
+	local lf = self:latest()
+	lf.setup()
+end
+
+function feature:do_mapping()
+	for _, child in ipairs(self.children) do
+		child:reg_plugins()
+	end
+	local lf = self:latest()
+	lf.setup()
+	for _, mapping in ipairs(lf.mappings) do
 		local mode, lhs, rhs, opts = mapping[1], mapping[2], mapping[3], mapping[4]
 		set_map(mode, lhs, rhs, opts)
 	end

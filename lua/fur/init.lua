@@ -53,9 +53,9 @@ function fur.reload()
 		vim.cmd("runtime! " .. file) -- source file which define fur.features, will call fur.start()
 	end
 	if fur.config.sync_on_reload then
-		plug.sync()
+		fur.plug_sync()
 	elseif fur.config.compile_on_reload then
-		plug.compile()
+		fur.plug_compile()
 	end
 end
 

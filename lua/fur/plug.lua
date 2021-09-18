@@ -1,3 +1,5 @@
+local log = require("fur.log")
+
 local plug = {
 	specs = {
 		"nanozuki/fur.nvim",
@@ -34,7 +36,17 @@ function plug.load_packer()
 			open_fn = require("packer.util").float,
 		},
 	})
+	-- source file after packer.compile()
+	vim.cmd("autocmd User PackerCompileDone lua require'fur.plug'.source_compiled_file()")
+	vim.cmd("doautocmd User PackerCompileDone")
+
 	plug.packer.ready = true
+end
+
+function plug.source_compiled_file()
+	local file = require("packer").config.compile_path
+	vim.cmd("source " .. file)
+	log.debug("source " .. file)
 end
 
 function plug.sync()
@@ -43,13 +55,11 @@ function plug.sync()
 		require("packer").use(spec)
 	end
 	require("packer").sync()
-	vim.cmd("runtime! " .. require("packer").config.compile_path)
 end
 
 function plug.compile()
 	plug.load_packer()
 	require("packer").compile()
-	vim.cmd("runtime! " .. require("packer").config.compile_path)
 end
 
 function plug.unset()

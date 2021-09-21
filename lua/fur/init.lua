@@ -33,6 +33,11 @@ function fur.start()
 	end
 end
 
+function fur.packadd(pack)
+	local ok = pcall(vim.cmd, "packadd " .. pack)
+	return ok
+end
+
 function fur.plug_sync()
 	require("fur.plug").sync()
 end

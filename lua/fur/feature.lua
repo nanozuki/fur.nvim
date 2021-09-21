@@ -89,7 +89,7 @@ function feature:reload()
 	for _, mapping in ipairs(self.mappings) do
 		local mode, lhs = mapping[1], mapping[2]
 		log.debug("unset_key(", mode, lhs, ")")
-		vim.api.nvim_del_keymap(mode, lhs)
+		pcall(vim.api.nvim_del_keymap, mode, lhs)
 	end
 
 	if self.source then

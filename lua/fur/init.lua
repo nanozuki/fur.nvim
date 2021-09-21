@@ -34,7 +34,10 @@ function fur.start()
 end
 
 function fur.packadd(pack)
-	local ok = pcall(vim.cmd, "packadd " .. pack)
+	local ok, err = pcall(vim.cmd, "packadd " .. pack)
+	if not ok then
+		print("packadd failed: ", err)
+	end
 	return ok
 end
 

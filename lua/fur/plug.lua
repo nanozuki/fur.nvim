@@ -59,6 +59,9 @@ end
 
 function plug.compile()
 	plug.load_packer()
+	for _, spec in ipairs(plug.specs) do
+		require("packer").use(spec)
+	end
 	require("packer").compile()
 end
 

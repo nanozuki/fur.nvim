@@ -45,8 +45,11 @@ end
 
 function plug.source_compiled_file()
 	local file = require("packer").config.compile_path
-	vim.cmd("source " .. file)
 	log.debug("source " .. file)
+	local ok, err = pcall(vim.cmd, "source " .. file)
+	if not ok then
+		log.warn("source packer's compiled file fail: ", err)
+	end
 end
 
 function plug.sync()
